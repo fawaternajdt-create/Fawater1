@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فاتورة مبيعات - Fashion World</title>
-    <!-- مكتبة لتمكين حفظ الفاتورة كصورة مباشرة -->
+    <!-- مكتبة التقاط الصورة بدقة عالية -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: 'Tahoma', Arial, sans-serif;
             background-color: #eef2f7;
             margin: 0;
-            padding: 10px;
+            padding: 8px;
             color: #2c3e50;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             background: #fff;
-            padding: 20px;
+            padding: 18px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
@@ -27,17 +27,17 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 3px solid #34495e;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
         }
         .brand-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
         .logo-img {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #d4af37;
@@ -45,60 +45,60 @@
         .company-info h2 {
             margin: 0;
             color: #2c3e50;
-            font-size: 20px;
+            font-size: 19px;
             font-weight: bold;
         }
         .company-info p {
-            margin: 3px 0 0;
+            margin: 2px 0 0;
             color: #7f8c8d;
-            font-size: 12px;
+            font-size: 11px;
         }
         .invoice-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
             color: #2c3e50;
             text-transform: uppercase;
         }
         .meta-section {
             background: #f8f9fa;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-size: 13px;
         }
         .form-row {
             display: flex;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .form-group {
             flex: 1;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .form-group label {
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
             color: #34495e;
         }
         .form-group input, .form-group select {
             width: 100%;
-            padding: 9px;
+            padding: 8px;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
             box-sizing: border-box;
             background: #fff;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         th, td {
             border: 1px solid #e2e8f0;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             font-size: 13px;
         }
@@ -109,77 +109,109 @@
         }
         td input {
             width: 100%;
-            padding: 8px;
+            padding: 7px;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
             text-align: center;
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 13px;
         }
         td:first-child input {
             text-align: right;
-            padding-right: 10px;
+            padding-right: 8px;
             font-weight: 500;
         }
         .totals-section {
             width: 100%;
-            margin-top: 15px;
-            font-size: 14px;
+            margin-top: 12px;
+            font-size: 13px;
             background: #f8f9fa;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
         }
         .total-row {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: 5px 0;
             border-bottom: 1px solid #e2e8f0;
         }
         .total-row.final {
             font-weight: bold;
-            font-size: 17px;
+            font-size: 16px;
             border-top: 2px solid #34495e;
             border-bottom: none;
-            margin-top: 5px;
-            padding-top: 10px;
+            margin-top: 4px;
+            padding-top: 8px;
             color: #2c3e50;
         }
+        
         .btn {
             background-color: #34495e;
             color: white;
             border: none;
-            padding: 11px 15px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             width: 100%;
             font-weight: bold;
-            transition: background 0.2s;
-            margin-top: 5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .btn:hover { background-color: #2c3e50; }
+        .btn:active { transform: scale(0.98); }
         .btn-danger {
             background-color: #e74c3c;
-            padding: 6px 10px;
+            padding: 5px 8px;
             font-size: 12px;
             width: auto;
             border-radius: 4px;
-        }
-        .actions {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-        .footer-note {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 12px;
-            color: #7f8c8d;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 12px;
+            box-shadow: none;
         }
         
-        /* شاشة أرشيف الفواتير */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #7f8c8d;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+        }
+        
+        .admin-panel {
+            background: #fffbeb;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #fef3c7;
+        }
+        .admin-panel label {
+            font-weight: bold;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        .admin-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .admin-buttons button {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
         #archiveModal {
             display: none;
             position: fixed;
@@ -192,7 +224,7 @@
         .archive-content {
             background: #fff;
             width: 90%;
-            max-width: 600px;
+            max-width: 550px;
             padding: 20px;
             border-radius: 10px;
             max-height: 80vh;
@@ -210,18 +242,19 @@
 <body>
 
 <div class="container" id="invoiceContainer">
-    <!-- لوحة تحكم علوية للمسوقين والأرشيف (تختفي عند الطباعة) -->
-    <div class="no-print" style="background: #fff3cd; padding: 10px; border-radius: 6px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; border: 1px solid #ffeeba;">
-        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: bold; color: #856404;">
+    <!-- لوحة التحكم الإدارية الخاصة (تختفي تماماً عند الطباعة أو أخذ الصورة) -->
+    <div class="no-print admin-panel">
+        <label>
             <input type="checkbox" id="toggleBranding" checked onchange="toggleCompanyBranding()" style="width: 18px; height: 18px;">
-            إظهار شعار واسم شركة Fashion World (ألغها للمسوقين)
+            إظهار شعار واسم Fashion World (ألغها لعمل فواتير المسوقين)
         </label>
-        <div style="display: flex; gap: 10px;">
-            <button class="btn" onclick="saveToArchive()" style="background-color: #d4ac0d; padding: 6px; font-size: 12px; margin:0;">💾 حفظ الفاتورة في الأرشيف</button>
-            <button class="btn" onclick="openArchive()" style="background-color: #7f8c8d; padding: 6px; font-size: 12px; margin:0;">📂 عرض أرشيف الفواتير</button>
+        <div class="admin-buttons">
+            <button class="btn" onclick="saveToArchive()" style="background-color: #d97706;">💾 حفظ بالأرشيف</button>
+            <button class="btn" onclick="openArchive()" style="background-color: #4b5563;">📂 عرض الأرشيف</button>
         </div>
     </div>
 
+    <!-- ترويسة الشركة واللوغو (تختفي عند إلغاء التحديد) -->
     <div class="header" id="headerSection">
         <div class="brand-section" id="brandDetails">
             <img src="https://i.ibb.co/6ccL3W7c/1001756979.webp" alt="Logo" class="logo-img">
@@ -231,7 +264,7 @@
                 <p>دمشق، الحريقة - سوريا</p>
             </div>
         </div>
-        <div class="invoice-title">فاتورة مبيعات</div>
+        <div class="invoice-title" id="invoiceTitleText">فاتورة مبيعات</div>
     </div>
 
     <div class="meta-section">
@@ -241,8 +274,8 @@
                 <input type="text" id="clientName" placeholder="أدخل اسم الزبون أو المحل...">
             </div>
             <div class="form-group">
-                <label>رقم الهاتف:</label>
-                <input type="text" id="clientPhone" placeholder="أدخل رقم الهاتف...">
+                <label>رقم الهاتف (للواتساب):</label>
+                <input type="text" id="clientPhone" placeholder="مثال: 9639xxxxxxxx">
             </div>
         </div>
 
@@ -251,13 +284,20 @@
                 <label>جهة الشحن (المحافظة / المكتب):</label>
                 <input type="text" id="shippingDest" placeholder="مثال: حلب - مكتب العباس...">
             </div>
+            <div class="form-group">
+                <label>عدد الطرود / الأكياس:</label>
+                <input type="text" id="packagesCount" placeholder="مثال: 2 طرد">
+            </div>
+        </div>
+
+        <div class="form-row">
             <div class="form-group no-print">
                 <label>سعر صرف الليرة (مقابل $):</label>
                 <input type="number" id="exchangeRate" value="15000" style="text-align: center; font-weight: bold;" oninput="calculateTotals()">
             </div>
         </div>
         
-        <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #555;">
+        <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: #555;">
             <div><strong>رقم الفاتورة:</strong> <span id="invNumber">#1042</span></div>
             <div><strong>التاريخ:</strong> <span id="invDate"></span></div>
         </div>
@@ -284,8 +324,8 @@
         </tbody>
     </table>
 
-    <div class="no-print" style="margin-bottom: 15px;">
-        <button class="btn" onclick="addRow()" style="background-color: #27ae60;">+ إضافة موديل جديد</button>
+    <div class="no-print" style="margin-bottom: 12px;">
+        <button class="btn" onclick="addRow()" style="background-color: #059669; padding: 10px;">+ إضافة موديل جديد</button>
     </div>
 
     <div class="totals-section">
@@ -293,32 +333,46 @@
             <span>إجمالي المبلغ بالدولار:</span>
             <span id="totalUSD" style="font-weight: bold;">$0.00</span>
         </div>
-        <div class="form-row no-print" style="margin: 8px 0; align-items: center;">
+
+        <div class="form-row no-print" style="margin: 6px 0; align-items: center;">
             <div class="form-group" style="margin:0;"><label style="font-size:11px;">قيمة الخصم ($):</label></div>
             <div class="form-group" style="margin:0;"><input type="number" id="discountVal" value="0" step="0.01" oninput="calculateTotals()" style="padding:5px;"></div>
         </div>
-        <div class="total-row" id="discountRow" style="display:none; color: #c0392b;">
+        <div class="total-row" id="discountRow" style="display:none; color: #dc2626;">
             <span>الخصم المطبق:</span>
             <span id="displayDiscount">-$0.00</span>
         </div>
+
         <div class="total-row final">
             <span>المبلغ الصافي المستحق ($):</span>
             <span id="finalUSD">$0.00</span>
         </div>
-        <div class="total-row final" style="color: #27ae60; background: #ebfef0; margin-top: 8px; padding: 10px; border-radius: 6px;">
-            <span>المبلغ المستحق بالليرة السورية:</span>
+        <div class="total-row final" style="color: #059669; background: #ecfdf5; margin-top: 6px; padding: 8px; border-radius: 6px;">
+            <span>المبلغ الصافي بالليرة السورية:</span>
             <span id="finalSYP">0 ل.س</span>
+        </div>
+
+        <div class="form-row no-print" style="margin-top: 10px; align-items: center; background: #fff; padding: 8px; border-radius: 6px;">
+            <div class="form-group" style="margin:0;"><label style="font-size:11px; color:#1e3a8a;">الواصل (المقبوض) $:</label></div>
+            <div class="form-group" style="margin:0;"><input type="number" id="paidVal" value="0" step="0.01" oninput="calculateTotals()" style="padding:5px; font-weight:bold; color:#16a34a;"></div>
+        </div>
+        <div class="total-row" id="remainingRow" style="margin-top: 6px; font-weight: bold; color: #b91c1c; background: #fef2f2; padding: 6px; border-radius: 4px;">
+            <span>المتبقي على الذمة (ديون):</span>
+            <span id="remainingUSD">$0.00</span>
         </div>
     </div>
 
-    <div class="form-group" style="margin-top: 15px;">
+    <div class="form-group" style="margin-top: 12px;">
         <label>ملاحظات الشحن أو الدفع:</label>
         <input type="text" id="notes" placeholder="ملاحظات التسليم، الحوالة، أو الشحن...">
     </div>
 
-    <div class="actions no-print">
-        <button class="btn" onclick="window.print()" style="background-color: #2980b9; padding: 12px; font-size: 15px;">طباعة / PDF 🖨️</button>
-        <button class="btn" onclick="downloadAsImage()" style="background-color: #8e44ad; padding: 12px; font-size: 15px;">حفظ كصورة للواتساب 🖼️</button>
+    <div class="actions-grid no-print">
+        <button class="btn" onclick="downloadAsImage()" style="background-color: #7c3aed;">🖼️ حفظ كصورة</button>
+        <button class="btn" onclick="sendToWhatsApp()" style="background-color: #16a34a;">💬 إرسال واتساب</button>
+    </div>
+    <div style="margin-top: 8px;" class="no-print">
+        <button class="btn" onclick="window.print()" style="background-color: #2563eb;">🖨️ طباعة / PDF</button>
     </div>
 
     <div class="footer-note" id="footerNote">
@@ -326,12 +380,11 @@
     </div>
 </div>
 
-<!-- نافذة الأرشيف -->
 <div id="archiveModal">
     <div class="archive-content">
         <h3 style="margin-top:0; color:#2c3e50;">📂 أرشيف الفواتير المحفوظة</h3>
         <div id="archiveList" style="margin-bottom: 15px;"></div>
-        <button class="btn" onclick="closeArchive()" style="background-color: #c0392b;">إغلاق</button>
+        <button class="btn" onclick="closeArchive()" style="background-color: #dc2626;">إغلاق</button>
     </div>
 </div>
 
@@ -342,8 +395,16 @@
 
     function toggleCompanyBranding() {
         const isChecked = document.getElementById('toggleBranding').checked;
-        document.getElementById('brandDetails').style.display = isChecked ? 'flex' : 'none';
-        document.getElementById('footerNote').style.display = isChecked ? 'block' : 'none';
+        const brandDetails = document.getElementById('brandDetails');
+        const footerNote = document.getElementById('footerNote');
+        
+        if (isChecked) {
+            brandDetails.style.display = 'flex';
+            footerNote.style.display = 'block';
+        } else {
+            brandDetails.style.display = 'none';
+            footerNote.style.display = 'none';
+        }
     }
 
     function addRow() {
@@ -374,6 +435,7 @@
         let grandTotalUSD = 0;
         const exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 0;
         const discount = parseFloat(document.getElementById('discountVal').value) || 0;
+        const paid = parseFloat(document.getElementById('paidVal').value) || 0;
 
         rows.forEach(row => {
             const price = parseFloat(row.querySelectorAll('input')[1].value) || 0;
@@ -399,20 +461,45 @@
         document.getElementById('finalUSD').innerText = '$' + finalUSD.toFixed(2);
         const totalSYP = finalUSD * exchangeRate;
         document.getElementById('finalSYP').innerText = totalSYP.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' ل.س';
+
+        let remaining = finalUSD - paid;
+        if (remaining < 0) remaining = 0;
+        document.getElementById('remainingUSD').innerText = '$' + remaining.toFixed(2);
     }
 
-    // حفظ الفاتورة كصورة مباشرة عبر مكتبة html2canvas
     function downloadAsImage() {
         const container = document.getElementById('invoiceContainer');
-        html2canvas(container, { scale: 2 }).then(canvas => {
+        html2canvas(container, { 
+            scale: 3, 
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'Invoice-' + (document.getElementById('clientName').value || 'FashionWorld') + '.png';
-            link.href = canvas.toDataURL('image/png');
+            const clientName = document.getElementById('clientName').value || 'Invoice';
+            link.download = 'Invoice-' + clientName + '.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
             link.click();
         });
     }
 
-    // نظام الأرشيف المحلي
+    function sendToWhatsApp() {
+        const phone = document.getElementById('clientPhone').value;
+        const client = document.getElementById('clientName').value || 'الزبون';
+        const finalUSD = document.getElementById('finalUSD').innerText;
+        const finalSYP = document.getElementById('finalSYP').innerText;
+        const shipping = document.getElementById('shippingDest').value || 'غير محددة';
+        const packages = document.getElementById('packagesCount').value || 'غير محدد';
+
+        let message = `مرحباً بك ${client} 🌹\nإليك تفاصيل فاتورتك:\n`;
+        message += `📦 جهة الشحن: ${shipping} (${packages})\n`;
+        message += `💰 المبلغ الإجمالي: ${finalUSD} (${finalSYP})\n`;
+        message += `شكراً لتعاملكم معنا!`;
+
+        const encodedMessage = encodeURIComponent(message);
+        const url = phone ? `https://wa.me/${phone}?text=${encodedMessage}` : `https://wa.me/?text=${encodedMessage}`;
+        window.open(url, '_blank');
+    }
+
     function saveToArchive() {
         const client = document.getElementById('clientName').value || 'زبون بدون اسم';
         const total = document.getElementById('finalUSD').innerText;
@@ -431,7 +518,7 @@
         if (archive.length === 0) {
             listDiv.innerHTML = '<p style="color:#7f8c8d;">لا توجد فواتير محفوظة في الأرشيف حالياً.</p>';
         } else {
-            listDiv.innerHTML = archive.map((inv, index) => `
+            listDiv.innerHTML = archive.map((inv) => `
                 <div style="background:#f8f9fa; padding:10px; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; font-size:13px;">
                     <div><strong>الزبون:</strong> ${inv.client} | <strong>المبلغ:</strong> ${inv.total}</div>
                     <div style="color:#7f8c8d; font-size:11px;">${inv.date}</div>
