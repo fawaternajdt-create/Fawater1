@@ -91,36 +91,60 @@
             box-sizing: border-box;
             background: #fff;
         }
-        table {
+
+        /* نظام إدخال الموديلات على طريقة "دفترة" (بطاقات متسلسلة للشاشة) */
+        .daftara-item {
+            background: #f8f9fa;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .daftara-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .daftara-item input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+            box-sizing: border-box;
+            background: #fff;
+        }
+        .delete-card-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* الجدول الأنيق (مخفي أثناء الإدخال، ويظهر تلقائياً عند الطباعة أو أخذ الصورة) */
+        #printTable {
+            display: none;
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 12px;
         }
-        th, td {
+        #printTable th, #printTable td {
             border: 1px solid #e2e8f0;
             padding: 8px;
             text-align: center;
             font-size: 13px;
         }
-        th {
+        #printTable th {
             background-color: #34495e;
             color: #fff;
             font-weight: 600;
         }
-        td input {
-            width: 100%;
-            padding: 7px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            text-align: center;
-            box-sizing: border-box;
-            font-size: 13px;
-        }
-        td:first-child input {
-            text-align: right;
-            padding-right: 8px;
-            font-weight: 500;
-        }
+
         .totals-section {
             width: 100%;
             margin-top: 12px;
@@ -159,14 +183,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .btn:active { transform: scale(0.98); }
-        .btn-danger {
-            background-color: #e74c3c;
-            padding: 5px 8px;
-            font-size: 12px;
-            width: auto;
-            border-radius: 4px;
-            box-shadow: none;
-        }
         
         .actions-grid {
             display: grid;
@@ -236,6 +252,8 @@
             .container { box-shadow: none; padding: 0; max-width: 100%; }
             .no-print { display: none !important; }
             input, select { border: none !important; background: transparent !important; }
+            .daftara-item { display: none !important; } /* إخفاء طريقة الدفترة عند الطباعة */
+            #printTable { display: table !important; } /* إظهار الجدول الأنيق عند الطباعة */
         }
     </style>
 </head>
@@ -254,10 +272,10 @@
         </div>
     </div>
 
-    <!-- ترويسة الشركة واللوغو (تختفي عند إلغاء التحديد) -->
+    <!-- ترويسة الشركة واللوغو -->
     <div class="header" id="headerSection">
         <div class="brand-section" id="brandDetails">
-            <img src="https://i.ibb.co/6ccL3W7c/1001756979.webp" alt="Logo" class="logo-img">
+            <img src="https://i.ibb.co/9v022x7/logo.webp" alt="Logo" class="logo-img" onerror="this.src='https://i.ibb.co/6ccL3W7c/1001756979.webp'">
             <div class="company-info">
                 <h2>Fashion World</h2>
                 <p>قسم الألبسة والجملة</p>
@@ -303,30 +321,29 @@
         </div>
     </div>
 
-    <table id="itemsTable">
+    <!-- واجهة الإدخال السريع على طراز "دفترة" (تظهر أثناء الاستخدام وتختفي عند الحفظ/الطباعة) -->
+    <div id="daftaraContainer" class="no-print">
+        <label style="font-weight: bold; font-size: 13px; color: #34495e; margin-bottom: 8px; display: block;">إدخال الموديلات (طريقة دفترة):</label>
+        <div id="daftaraItemsList">
+            <!-- سيتم إضافة حقول الإدخال هنا برمجياً -->
+        </div>
+        <button class="btn" onclick="addDaftaraRow()" style="background-color: #059669; padding: 10px; margin-top: 5px;">+ إضافة موديل جديد</button>
+    </div>
+
+    <!-- الجدول الأنيق (يظهر تلقائياً في الصورة والطباعة) -->
+    <table id="printTable">
         <thead>
             <tr>
                 <th style="width: 45%;">وصف الموديل / القياس / اللون</th>
                 <th style="width: 17%;">السعر ($)</th>
                 <th style="width: 12%;">الكمية</th>
                 <th style="width: 18%;">المجموع ($)</th>
-                <th class="no-print" style="width: 8%;">حذف</th>
             </tr>
         </thead>
-        <tbody id="tableBody">
-            <tr>
-                <td><input type="text" placeholder="اسم الموديل، القياس، أو التفاصيل..."></td>
-                <td><input type="number" step="0.01" value="0" oninput="calculateTotals()"></td>
-                <td><input type="number" value="1" oninput="calculateTotals()"></td>
-                <td class="row-total" style="font-weight: bold;">$0.00</td>
-                <td class="no-print"><button class="btn btn-danger" onclick="deleteRow(this)">✕</button></td>
-            </tr>
+        <tbody id="printTableBody">
+            <!-- سيتم تعبئته تلقائياً عند الحفظ أو الطباعة -->
         </tbody>
     </table>
-
-    <div class="no-print" style="margin-bottom: 12px;">
-        <button class="btn" onclick="addRow()" style="background-color: #059669; padding: 10px;">+ إضافة موديل جديد</button>
-    </div>
 
     <div class="totals-section">
         <div class="total-row">
@@ -393,6 +410,11 @@
     const dateString = String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear();
     document.getElementById('invDate').innerText = dateString;
 
+    // تشغيل أول سطر إدخال تلقائياً عند فتح الصفحة
+    window.onload = function() {
+        addDaftaraRow();
+    };
+
     function toggleCompanyBranding() {
         const isChecked = document.getElementById('toggleBranding').checked;
         const brandDetails = document.getElementById('brandDetails');
@@ -407,23 +429,37 @@
         }
     }
 
-    function addRow() {
-        const tbody = document.getElementById('tableBody');
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td><input type="text" placeholder="اسم الموديل، القياس، أو التفاصيل..."></td>
-            <td><input type="number" step="0.01" value="0" oninput="calculateTotals()"></td>
-            <td><input type="number" value="1" oninput="calculateTotals()"></td>
-            <td class="row-total" style="font-weight: bold;">$0.00</td>
-            <td class="no-print"><button class="btn btn-danger" onclick="deleteRow(this)">✕</button></td>
+    function addDaftaraRow() {
+        const list = document.getElementById('daftaraItemsList');
+        const div = document.createElement('div');
+        div.className = 'daftara-item';
+        div.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 11px; font-weight: bold; color: #475569;">موديل جديد</span>
+                <button class="delete-card-btn" onclick="removeDaftaraRow(this)">حذف</button>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <input type="text" class="item-desc" placeholder="وصف الموديل / القياس / اللون..." oninput="calculateTotals()">
+            </div>
+            <div class="daftara-row">
+                <div>
+                    <label style="font-size:10px; color:#64748b;">السعر ($):</label>
+                    <input type="number" step="0.01" value="0" class="item-price" oninput="calculateTotals()">
+                </div>
+                <div>
+                    <label style="font-size:10px; color:#64748b;">الكمية:</label>
+                    <input type="number" value="1" class="item-qty" oninput="calculateTotals()">
+                </div>
+            </div>
         `;
-        tbody.appendChild(newRow);
+        list.appendChild(div);
+        calculateTotals();
     }
 
-    function deleteRow(button) {
-        const row = button.closest('tr');
-        if(document.querySelectorAll('#tableBody tr').length > 1) {
-            row.remove();
+    function removeDaftaraRow(button) {
+        const items = document.querySelectorAll('.daftara-item');
+        if (items.length > 1) {
+            button.closest('.daftara-item').remove();
             calculateTotals();
         } else {
             alert('يجب أن تحتوي الفاتورة على بند واحد على الأقل.');
@@ -431,19 +467,16 @@
     }
 
     function calculateTotals() {
-        const rows = document.querySelectorAll('#tableBody tr');
+        const items = document.querySelectorAll('.daftara-item');
         let grandTotalUSD = 0;
         const exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 0;
         const discount = parseFloat(document.getElementById('discountVal').value) || 0;
         const paid = parseFloat(document.getElementById('paidVal').value) || 0;
 
-        rows.forEach(row => {
-            const price = parseFloat(row.querySelectorAll('input')[1].value) || 0;
-            const qty = parseFloat(row.querySelectorAll('input')[2].value) || 0;
-            const rowTotal = price * qty;
-            
-            row.querySelector('.row-total').innerText = '$' + rowTotal.toFixed(2);
-            grandTotalUSD += rowTotal;
+        items.forEach(item => {
+            const price = parseFloat(item.querySelector('.item-price').value) || 0;
+            const qty = parseFloat(item.querySelector('.item-qty').value) || 0;
+            grandTotalUSD += (price * qty);
         });
 
         document.getElementById('totalUSD').innerText = '$' + grandTotalUSD.toFixed(2);
@@ -467,7 +500,34 @@
         document.getElementById('remainingUSD').innerText = '$' + remaining.toFixed(2);
     }
 
+    // تجهيز الجدول الأنيق مؤقتاً قبل التقاط الصورة أو الطباعة
+    function prepareTableForExport() {
+        const items = document.querySelectorAll('.daftara-item');
+        const tbody = document.getElementById('printTableBody');
+        tbody.innerHTML = '';
+
+        items.forEach(item => {
+            const desc = item.querySelector('.item-desc').value || 'موديل بدون وصف';
+            const price = parseFloat(item.querySelector('.item-price').value) || 0;
+            const qty = parseFloat(item.querySelector('.item-qty').value) || 0;
+            const total = price * qty;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="text-align: right; padding-right: 10px;">${desc}</td>
+                <td>$${price.toFixed(2)}</td>
+                <td>${qty}</td>
+                <td style="font-weight: bold;">$${total.toFixed(2)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
     function downloadAsImage() {
+        prepareTableForExport();
+        document.getElementById('daftaraContainer').style.display = 'none';
+        document.getElementById('printTable').style.display = 'table';
+
         const container = document.getElementById('invoiceContainer');
         html2canvas(container, { 
             scale: 3, 
@@ -479,6 +539,10 @@
             link.download = 'Invoice-' + clientName + '.png';
             link.href = canvas.toDataURL('image/png', 1.0);
             link.click();
+
+            // إعادة إظهار واجهة الدفترة بعد أخذ الصورة
+            document.getElementById('daftaraContainer').style.display = 'block';
+            document.getElementById('printTable').style.display = 'none';
         });
     }
 
