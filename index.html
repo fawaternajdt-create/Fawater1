@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فاتورة مبيعات - Fashion World</title>
+    <!-- مكتبة لتمكين حفظ الفاتورة كصورة مباشرة -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: 'Tahoma', Arial, sans-serif;
@@ -23,24 +25,36 @@
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             border-bottom: 3px solid #34495e;
             padding-bottom: 15px;
             margin-bottom: 20px;
         }
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #d4af37;
+        }
         .company-info h2 {
             margin: 0;
             color: #2c3e50;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
         }
         .company-info p {
-            margin: 4px 0 0;
+            margin: 3px 0 0;
             color: #7f8c8d;
-            font-size: 13px;
+            font-size: 12px;
         }
         .invoice-title {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: bold;
             color: #2c3e50;
             text-transform: uppercase;
@@ -102,7 +116,6 @@
             box-sizing: border-box;
             font-size: 14px;
         }
-        /* تكبير خانة وصف الموديل لتكون مريحة جداً */
         td:first-child input {
             text-align: right;
             padding-right: 10px;
@@ -142,6 +155,7 @@
             width: 100%;
             font-weight: bold;
             transition: background 0.2s;
+            margin-top: 5px;
         }
         .btn:hover { background-color: #2c3e50; }
         .btn-danger {
@@ -152,8 +166,9 @@
             border-radius: 4px;
         }
         .actions {
-            margin-top: 20px;
-            text-align: center;
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
         }
         .footer-note {
             text-align: center;
@@ -162,6 +177,26 @@
             color: #7f8c8d;
             border-top: 1px solid #e2e8f0;
             padding-top: 12px;
+        }
+        
+        /* شاشة أرشيف الفواتير */
+        #archiveModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .archive-content {
+            background: #fff;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         @media print {
@@ -174,14 +209,29 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <div class="invoice-title">فاتورة مبيعات</div>
-        <div class="company-info" style="text-align: left;">
-            <h2>Fashion World</h2>
-            <p>قسم الألبسة والجملة</p>
-            <p>دمشق، الحريقة - سوريا</p>
+<div class="container" id="invoiceContainer">
+    <!-- لوحة تحكم علوية للمسوقين والأرشيف (تختفي عند الطباعة) -->
+    <div class="no-print" style="background: #fff3cd; padding: 10px; border-radius: 6px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; border: 1px solid #ffeeba;">
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: bold; color: #856404;">
+            <input type="checkbox" id="toggleBranding" checked onchange="toggleCompanyBranding()" style="width: 18px; height: 18px;">
+            إظهار شعار واسم شركة Fashion World (ألغها للمسوقين)
+        </label>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn" onclick="saveToArchive()" style="background-color: #d4ac0d; padding: 6px; font-size: 12px; margin:0;">💾 حفظ الفاتورة في الأرشيف</button>
+            <button class="btn" onclick="openArchive()" style="background-color: #7f8c8d; padding: 6px; font-size: 12px; margin:0;">📂 عرض أرشيف الفواتير</button>
         </div>
+    </div>
+
+    <div class="header" id="headerSection">
+        <div class="brand-section" id="brandDetails">
+            <img src="https://i.ibb.co/6ccL3W7c/1001756979.webp" alt="Logo" class="logo-img">
+            <div class="company-info">
+                <h2>Fashion World</h2>
+                <p>قسم الألبسة والجملة</p>
+                <p>دمشق، الحريقة - سوريا</p>
+            </div>
+        </div>
+        <div class="invoice-title">فاتورة مبيعات</div>
     </div>
 
     <div class="meta-section">
@@ -243,6 +293,14 @@
             <span>إجمالي المبلغ بالدولار:</span>
             <span id="totalUSD" style="font-weight: bold;">$0.00</span>
         </div>
+        <div class="form-row no-print" style="margin: 8px 0; align-items: center;">
+            <div class="form-group" style="margin:0;"><label style="font-size:11px;">قيمة الخصم ($):</label></div>
+            <div class="form-group" style="margin:0;"><input type="number" id="discountVal" value="0" step="0.01" oninput="calculateTotals()" style="padding:5px;"></div>
+        </div>
+        <div class="total-row" id="discountRow" style="display:none; color: #c0392b;">
+            <span>الخصم المطبق:</span>
+            <span id="displayDiscount">-$0.00</span>
+        </div>
         <div class="total-row final">
             <span>المبلغ الصافي المستحق ($):</span>
             <span id="finalUSD">$0.00</span>
@@ -259,11 +317,21 @@
     </div>
 
     <div class="actions no-print">
-        <button class="btn" onclick="window.print()" style="background-color: #2980b9; padding: 13px; font-size: 16px;">طباعة الفاتورة أو حفظ كـ PDF 🖨️</button>
+        <button class="btn" onclick="window.print()" style="background-color: #2980b9; padding: 12px; font-size: 15px;">طباعة / PDF 🖨️</button>
+        <button class="btn" onclick="downloadAsImage()" style="background-color: #8e44ad; padding: 12px; font-size: 15px;">حفظ كصورة للواتساب 🖼️</button>
     </div>
 
-    <div class="footer-note">
+    <div class="footer-note" id="footerNote">
         شكراً لتعاملكم مع Fashion World — نسعد دائماً بخدمتكم
+    </div>
+</div>
+
+<!-- نافذة الأرشيف -->
+<div id="archiveModal">
+    <div class="archive-content">
+        <h3 style="margin-top:0; color:#2c3e50;">📂 أرشيف الفواتير المحفوظة</h3>
+        <div id="archiveList" style="margin-bottom: 15px;"></div>
+        <button class="btn" onclick="closeArchive()" style="background-color: #c0392b;">إغلاق</button>
     </div>
 </div>
 
@@ -271,6 +339,12 @@
     const today = new Date();
     const dateString = String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear();
     document.getElementById('invDate').innerText = dateString;
+
+    function toggleCompanyBranding() {
+        const isChecked = document.getElementById('toggleBranding').checked;
+        document.getElementById('brandDetails').style.display = isChecked ? 'flex' : 'none';
+        document.getElementById('footerNote').style.display = isChecked ? 'block' : 'none';
+    }
 
     function addRow() {
         const tbody = document.getElementById('tableBody');
@@ -299,6 +373,7 @@
         const rows = document.querySelectorAll('#tableBody tr');
         let grandTotalUSD = 0;
         const exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 0;
+        const discount = parseFloat(document.getElementById('discountVal').value) || 0;
 
         rows.forEach(row => {
             const price = parseFloat(row.querySelectorAll('input')[1].value) || 0;
@@ -310,10 +385,64 @@
         });
 
         document.getElementById('totalUSD').innerText = '$' + grandTotalUSD.toFixed(2);
-        document.getElementById('finalUSD').innerText = '$' + grandTotalUSD.toFixed(2);
+        
+        let finalUSD = grandTotalUSD - discount;
+        if (finalUSD < 0) finalUSD = 0;
 
-        const totalSYP = grandTotalUSD * exchangeRate;
+        if (discount > 0) {
+            document.getElementById('discountRow').style.display = 'flex';
+            document.getElementById('displayDiscount').innerText = '-$' + discount.toFixed(2);
+        } else {
+            document.getElementById('discountRow').style.display = 'none';
+        }
+
+        document.getElementById('finalUSD').innerText = '$' + finalUSD.toFixed(2);
+        const totalSYP = finalUSD * exchangeRate;
         document.getElementById('finalSYP').innerText = totalSYP.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' ل.س';
+    }
+
+    // حفظ الفاتورة كصورة مباشرة عبر مكتبة html2canvas
+    function downloadAsImage() {
+        const container = document.getElementById('invoiceContainer');
+        html2canvas(container, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'Invoice-' + (document.getElementById('clientName').value || 'FashionWorld') + '.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    // نظام الأرشيف المحلي
+    function saveToArchive() {
+        const client = document.getElementById('clientName').value || 'زبون بدون اسم';
+        const total = document.getElementById('finalUSD').innerText;
+        const date = document.getElementById('invDate').innerText;
+        
+        const invoiceData = { client, total, date };
+        let archive = JSON.parse(localStorage.getItem('fawater_archive')) || [];
+        archive.unshift(invoiceData);
+        localStorage.setItem('fawater_archive', JSON.stringify(archive));
+        alert('✅ تم حفظ الفاتورة في الأرشيف بنجاح!');
+    }
+
+    function openArchive() {
+        const archive = JSON.parse(localStorage.getItem('fawater_archive')) || [];
+        const listDiv = document.getElementById('archiveList');
+        if (archive.length === 0) {
+            listDiv.innerHTML = '<p style="color:#7f8c8d;">لا توجد فواتير محفوظة في الأرشيف حالياً.</p>';
+        } else {
+            listDiv.innerHTML = archive.map((inv, index) => `
+                <div style="background:#f8f9fa; padding:10px; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+                    <div><strong>الزبون:</strong> ${inv.client} | <strong>المبلغ:</strong> ${inv.total}</div>
+                    <div style="color:#7f8c8d; font-size:11px;">${inv.date}</div>
+                </div>
+            `).join('');
+        }
+        document.getElementById('archiveModal').style.display = 'flex';
+    }
+
+    function closeArchive() {
+        document.getElementById('archiveModal').style.display = 'none';
     }
 </script>
 
